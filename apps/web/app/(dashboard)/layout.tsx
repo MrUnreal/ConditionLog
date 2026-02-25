@@ -17,21 +17,21 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      <header className="glass sticky top-0 z-50 border-b">
+    <div className="min-h-screen bg-[#080C12]">
+      <header className="glass sticky top-0 z-50 border-b border-[#1E2A3A]/60">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16">
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#00E5C5] text-[#080C12] text-xs font-bold">
                 CL
               </div>
-              <span className="text-lg font-bold sm:text-xl">ConditionLog</span>
+              <span className="text-lg font-bold tracking-tight sm:text-xl">ConditionLog</span>
             </Link>
             <nav className="hidden items-center gap-1 sm:flex" aria-label="Main navigation">
-              <Link href="/dashboard" className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+              <Link href="/dashboard" className="rounded-md px-3 py-1.5 text-sm font-medium text-[#8A94A6] hover:text-foreground hover:bg-[#1A2233] transition-colors">
                 Dashboard
               </Link>
-              <Link href="/properties" className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+              <Link href="/properties" className="rounded-md px-3 py-1.5 text-sm font-medium text-[#8A94A6] hover:text-foreground hover:bg-[#1A2233] transition-colors">
                 Properties
               </Link>
             </nav>
@@ -39,10 +39,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
           {/* Desktop nav */}
           <div className="hidden items-center gap-4 sm:flex">
-            <span className="text-sm text-muted-foreground">{user.email}</span>
+            <span className="text-sm text-[#8A94A6]">{user.email}</span>
             <ThemeToggle />
             <form action={signOut}>
-              <Button variant="ghost" size="sm" type="submit">
+              <Button variant="ghost" size="sm" type="submit" className="text-[#8A94A6] hover:text-foreground">
                 Sign out
               </Button>
             </form>

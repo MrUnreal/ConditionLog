@@ -1,19 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Barlow_Condensed, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow-condensed",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -50,8 +61,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#1a1a2e' },
+    { media: '(prefers-color-scheme: light)', color: '#F8F9FB' },
+    { media: '(prefers-color-scheme: dark)', color: '#080C12' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -66,7 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${barlowCondensed.variable} ${dmSans.variable} ${ibmPlexMono.variable} antialiased`}
       >
         <ThemeProvider>
           <a
