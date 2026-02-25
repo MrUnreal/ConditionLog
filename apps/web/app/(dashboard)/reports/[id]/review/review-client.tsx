@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { fireConfetti } from '@/lib/confetti';
 
 interface Photo {
   id: string;
@@ -50,7 +51,8 @@ export function ReviewClient({ reportId, rooms, reportType }: ReviewClientProps)
       if (result?.error) {
         toast.error(result.error);
       } else {
-        toast.success('Report completed!');
+        fireConfetti();
+        toast.success('Report completed! Great job documenting everything.');
         router.push(`/reports/${reportId}`);
       }
     });

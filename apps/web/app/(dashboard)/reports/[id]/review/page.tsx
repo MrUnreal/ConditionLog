@@ -5,6 +5,7 @@ import { getRooms } from '@/actions/rooms';
 import { getSignedPhotoUrl } from '@/actions/photos';
 import { Button } from '@/components/ui/button';
 import { ReviewClient } from './review-client';
+import { ProgressSteps } from '@/components/progress-steps';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -48,6 +49,7 @@ export default async function ReviewPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 animate-fade-in">
+      <ProgressSteps currentStep={3} />
       <div className="flex items-center gap-4">
         <Link href={`/reports/${id}/walkthrough`}>
           <Button variant="ghost" size="sm">

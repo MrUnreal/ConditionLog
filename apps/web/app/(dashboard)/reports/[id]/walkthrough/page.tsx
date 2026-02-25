@@ -5,6 +5,7 @@ import { getRooms } from '@/actions/rooms';
 import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { WalkthroughClient } from './walkthrough-client';
+import { ProgressSteps } from '@/components/progress-steps';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -38,6 +39,7 @@ export default async function WalkthroughPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 animate-fade-in">
+      <ProgressSteps currentStep={2} />
       <div className="flex items-center gap-4">
         <Link href={`/reports/${id}`}>
           <Button variant="ghost" size="sm">

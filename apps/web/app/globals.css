@@ -184,6 +184,24 @@
     radial-gradient(ellipse 70% 50% at 50% 80%, oklch(0.55 0.15 300 / 5%), transparent);
 }
 
+/* Stat card hover glow */
+.stat-card {
+  position: relative;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(circle at 50% 50%, oklch(0.488 0.217 264 / 6%), transparent 70%);
+  pointer-events: none;
+}
+.stat-card:hover::after {
+  opacity: 1;
+}
+
 /* Glass morphism */
 .glass {
   background: oklch(1 0 0 / 70%);
