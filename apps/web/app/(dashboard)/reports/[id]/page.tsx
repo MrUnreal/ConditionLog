@@ -82,9 +82,12 @@ export default async function ReportDetailPage({ params }: Props) {
       )}
 
       {report.status === 'completed' && (
-        <div className="flex gap-3">
-          <Link href={`/reports/${id}/pdf`}>
-            <Button>Download PDF</Button>
+        <div className="flex flex-wrap gap-3">
+          <Link href={`/reports/${id}/view`}>
+            <Button>📋 View Full Report</Button>
+          </Link>
+          <Link href={`/api/reports/${id}/pdf`}>
+            <Button variant="outline">📄 Download PDF</Button>
           </Link>
           <EmailReportButton reportId={id} />
           <ShareReportButton reportId={id} existingToken={report.share_token ?? undefined} />
