@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,9 +15,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ConditionLog — Rental Condition Documentation',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? 'https://conditionlog.vercel.app',
+  ),
+  title: {
+    default: 'ConditionLog — Rental Condition Documentation',
+    template: '%s | ConditionLog',
+  },
   description:
     'Document your rental property condition with photos at move-in and move-out. Protect your security deposit with timestamped evidence.',
+  openGraph: {
+    type: 'website',
+    siteName: 'ConditionLog',
+    title: 'ConditionLog — Rental Condition Documentation',
+    description:
+      'Document your rental property condition with photos at move-in and move-out. Protect your security deposit with timestamped evidence.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'ConditionLog — Rental Condition Documentation',
+    description:
+      'Document your rental property condition with photos. Protect your security deposit.',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#18181b' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -25,12 +54,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster />
+        <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+          >
+            Skip to content
+          </a>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

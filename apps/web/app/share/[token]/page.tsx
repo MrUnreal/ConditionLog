@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +15,32 @@ const REPORT_TYPE_LABELS: Record<string, string> = {
   move_out: 'Move-Out Inspection',
   maintenance: 'Maintenance Inspection',
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { token } = await params;
+  const supabase = await createClient();
+
+  const { data: report } = await supabase
+    .from('reports')
+    .select('report_type, properties(address_line1)')
+    .eq('share_token', token)
+    .is('deleted_at', null)
+    .single();
+
+  if (!report) {
+    return { title: 'Report Not Found' };
+  }
+
+  const property = report.properties as unknown as Record<string, unknown> | null;
+  const address = (property?.address_line1 as string) ?? 'Property';
+  const type = REPORT_TYPE_LABELS[report.report_type] ?? 'Inspection';
+
+  return {
+    title: `${type} — ${address}`,
+    description: `${type} condition report for ${address}. View photos and notes documenting the property condition.`,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function SharePage({ params }: Props) {
   const { token } = await params;

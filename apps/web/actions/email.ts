@@ -1,9 +1,17 @@
 'use server';
 
+import { z } from 'zod';
 import { getResend } from '@/lib/resend';
 import { createClient } from '@/lib/supabase/server';
 
+const emailSchema = z.string().email('Please enter a valid email address');
+
 export async function sendReportEmail(reportId: string, recipientEmail: string) {
+  const parsedEmail = emailSchema.safeParse(recipientEmail);
+  if (!parsedEmail.success) {
+    return { error: parsedEmail.error.errors[0]?.message ?? 'Invalid email' };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -48,9 +56,9 @@ export async function sendReportEmail(reportId: string, recipientEmail: string) 
       .eq('id', reportId);
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
   const viewUrl = `${baseUrl}/share/${shareToken}`;
 
   try {
