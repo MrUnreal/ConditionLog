@@ -7,10 +7,11 @@
 
 ## Phase 0: Foundation & Setup
 
-### Task 0.1 — Initialize monorepo with Turborepo + pnpm
+### Task 0.1 — Initialize monorepo with Turborepo + pnpm ✅
 - **Depends on:** —
 - **Files:** `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `.gitignore`, `.nvmrc`, `README.md`
 - **Done when:** `pnpm install` succeeds; `turbo build` pipeline configured for build/lint/typecheck
+- **Completed:** Monorepo initialized with Turborepo 2.8, pnpm 10, Prettier, directory scaffolding, PLAN.md, DECISIONS.md, and README.
 
 ### Task 0.2 — Scaffold Next.js 14+ app (App Router)
 - **Depends on:** 0.1
