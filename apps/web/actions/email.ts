@@ -1,6 +1,6 @@
 'use server';
 
-import { resend } from '@/lib/resend';
+import { getResend } from '@/lib/resend';
 import { createClient } from '@/lib/supabase/server';
 
 export async function sendReportEmail(reportId: string, recipientEmail: string) {
@@ -54,7 +54,7 @@ export async function sendReportEmail(reportId: string, recipientEmail: string) 
   const viewUrl = `${baseUrl}/share/${shareToken}`;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: process.env.RESEND_FROM_EMAIL ?? 'ConditionLog <noreply@conditionlog.com>',
       to: recipientEmail,
       subject: `${reportLabel} Condition Report — ${address}`,

@@ -142,7 +142,7 @@ export function ReviewClient({ reportId, rooms, reportType }: ReviewClientProps)
         <Button variant="outline" onClick={() => router.back()}>
           ← Back to Walkthrough
         </Button>
-        <Button onClick={handleComplete} disabled={isPending || totalPhotos === 0}>
+        <Button onClick={handleComplete} disabled={isPending || (totalPhotos === 0 && roomsWithPhotos === 0 && !rooms.some((r) => r.notes))}>
           {isPending ? 'Completing…' : 'Complete Report ✓'}
         </Button>
       </div>

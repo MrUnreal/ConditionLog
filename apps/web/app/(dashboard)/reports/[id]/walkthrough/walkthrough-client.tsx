@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ROOM_PHOTO_HINTS, ROOM_TYPE_LABELS, type RoomType } from '@conditionlog/shared';
 import { updateRoom } from '@/actions/rooms';
@@ -67,19 +67,21 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
     [photoUrls],
   );
 
+  // Load signed URLs for current room's photos
+  useEffect(() => {
+    if (currentRoom && currentRoom.photos.length > 0) {
+      const missingUrls = currentRoom.photos.filter((p) => !photoUrls[p.id]);
+      if (missingUrls.length > 0) {
+        loadPhotoUrls(currentRoom.photos);
+      }
+    }
+  }, [currentRoom, loadPhotoUrls, photoUrls]);
+
   if (!currentRoom) return null;
 
   const roomType = currentRoom.room_type as RoomType;
   const hints = ROOM_PHOTO_HINTS[roomType] ?? ROOM_PHOTO_HINTS.other;
   const progress = ((currentIndex + 1) / rooms.length) * 100;
-
-  // Load signed URLs for current room's photos
-  if (currentRoom.photos.length > 0) {
-    const missingUrls = currentRoom.photos.filter((p) => !photoUrls[p.id]);
-    if (missingUrls.length > 0) {
-      loadPhotoUrls(currentRoom.photos);
-    }
-  }
 
   async function saveNotes() {
     const roomNotes = notes[currentRoom.id] ?? '';
