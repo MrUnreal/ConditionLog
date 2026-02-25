@@ -211,3 +211,48 @@
 .dark .glass {
   background: oklch(0.13 0.015 260 / 70%);
 }
+
+/* ---- Mobile / PWA ---- */
+
+/* Safe area insets for notched phones */
+html {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Prevent pull-to-refresh interference on walkthrough swipe areas */
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+/* Minimum touch target size */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent text zoom on input focus in iOS Safari */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Smooth scroll on mobile */
+@media (max-width: 640px) {
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* PWA standalone mode styling */
+@media (display-mode: standalone) {
+  /* Extra top padding for status bar */
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+}

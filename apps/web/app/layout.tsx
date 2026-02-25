@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
+import { InstallPrompt } from "@/components/pwa/install-prompt";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -53,6 +55,7 @@ export const viewport: Viewport = {
   ],
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({
@@ -74,6 +77,8 @@ export default function RootLayout({
           </a>
           {children}
           <Toaster />
+          <ServiceWorkerRegister />
+          <InstallPrompt />
         </ThemeProvider>
       </body>
     </html>

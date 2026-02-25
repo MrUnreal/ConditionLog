@@ -72,12 +72,12 @@ export function PhotoGallery({ photos, reportId, onPhotoDeleted }: PhotoGalleryP
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
         {photos.map((photo) => (
           <button
             key={photo.id}
             onClick={() => openPhoto(photo)}
-            className="group relative aspect-square overflow-hidden rounded-md border bg-muted"
+            className="group relative aspect-square overflow-hidden rounded-lg border bg-muted min-h-[44px]"
           >
             <Image
               src={photo.signedUrl}
@@ -96,13 +96,13 @@ export function PhotoGallery({ photos, reportId, onPhotoDeleted }: PhotoGalleryP
       </div>
 
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Photo Detail</DialogTitle>
           </DialogHeader>
           {selectedPhoto && (
             <div className="space-y-4">
-              <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
+              <div className="relative aspect-[4/3] sm:aspect-video overflow-hidden rounded-lg bg-muted">
                 <Image
                   src={selectedPhoto.signedUrl}
                   alt={selectedPhoto.caption ?? 'Property photo'}

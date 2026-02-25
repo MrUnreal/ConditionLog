@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ROOM_PHOTO_HINTS, ROOM_TYPE_LABELS, type RoomType } from '@conditionlog/shared';
 import { updateRoom } from '@/actions/rooms';
 import { getSignedPhotoUrl } from '@/actions/photos';
-import { PhotoUpload } from '@/components/photos/photo-upload';
+import { PhotoUpload, type PhotoUploadHandle } from '@/components/photos/photo-upload';
 import { PhotoGallery } from '@/components/photos/photo-gallery';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,6 +51,11 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
   const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
   const [refreshKey, setRefreshKey] = useState(0);
 
+  // Swipe gesture tracking
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const photoUploadRef = useRef<PhotoUploadHandle>(null);
+
   const currentRoom = rooms[currentIndex];
 
   const loadPhotoUrls = useCallback(
@@ -76,6 +81,39 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
       }
     }
   }, [currentRoom, loadPhotoUrls, photoUrls]);
+
+  // Swipe gesture handlers for room navigation
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current) return;
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - touchStartRef.current.x;
+      const deltaY = touch.clientY - touchStartRef.current.y;
+      const SWIPE_THRESHOLD = 80;
+
+      // Only handle horizontal swipes (not vertical scrolling)
+      if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX < 0 && currentIndex < rooms.length - 1) {
+          // Swipe left → next room
+          goToRoom(currentIndex + 1);
+        } else if (deltaX > 0 && currentIndex > 0) {
+          // Swipe right → previous room
+          goToRoom(currentIndex - 1);
+        }
+      }
+      touchStartRef.current = null;
+    },
+    [currentIndex, rooms.length], // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   if (!currentRoom) return null;
 
@@ -109,7 +147,12 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
   }));
 
   return (
-    <div className="space-y-6">
+    <div
+      ref={containerRef}
+      className="space-y-4 pb-20 sm:space-y-6 sm:pb-0"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Progress header */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
@@ -121,30 +164,37 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
         <Progress value={progress} />
       </div>
 
-      {/* Room navigation pills */}
-      <div className="flex flex-wrap gap-2">
-        {rooms.map((room, i) => (
-          <button
-            key={room.id}
-            onClick={() => goToRoom(i)}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              i === currentIndex
-                ? 'bg-primary text-primary-foreground'
-                : room.photos.length > 0
-                  ? 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-100'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-            }`}
-          >
-            {room.room_label ?? ROOM_TYPE_LABELS[room.room_type as RoomType] ?? room.room_type}
-            {room.photos.length > 0 && ` (${room.photos.length})`}
-          </button>
-        ))}
+      {/* Room navigation pills — horizontally scrollable on mobile */}
+      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-2 pb-1 sm:flex-wrap">
+          {rooms.map((room, i) => (
+            <button
+              key={room.id}
+              onClick={() => goToRoom(i)}
+              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors min-h-[36px] ${
+                i === currentIndex
+                  ? 'bg-primary text-primary-foreground'
+                  : room.photos.length > 0
+                    ? 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-100'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
+            >
+              {room.room_label ?? ROOM_TYPE_LABELS[room.room_type as RoomType] ?? room.room_type}
+              {room.photos.length > 0 && ` (${room.photos.length})`}
+            </button>
+          ))}
+        </div>
       </div>
+
+      {/* Swipe hint — mobile only, shows once */}
+      <p className="text-center text-xs text-muted-foreground sm:hidden">
+        Swipe left/right to switch rooms
+      </p>
 
       {/* Current room */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg sm:text-xl">
             {currentRoom.room_label ??
               ROOM_TYPE_LABELS[roomType] ??
               currentRoom.room_type}
@@ -153,13 +203,13 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
             Take photos of this room. Use the checklist below as a guide.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-5">
           {/* Photo hints checklist */}
           <div>
             <Label className="mb-2 block text-sm font-medium">Photo Checklist</Label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {hints.map((hint) => (
-                <Badge key={hint} variant="outline" className="text-xs">
+                <Badge key={hint} variant="outline" className="text-xs py-1">
                   {hint}
                 </Badge>
               ))}
@@ -170,6 +220,7 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
           <div>
             <Label className="mb-2 block text-sm font-medium">Photos</Label>
             <PhotoUpload
+              ref={photoUploadRef}
               roomId={currentRoom.id}
               reportId={reportId}
               userId={userId}
@@ -197,13 +248,14 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
               }
               placeholder="Describe any existing damage, wear, or notable conditions…"
               rows={3}
+              className="text-base sm:text-sm"
             />
           </div>
         </CardContent>
       </Card>
 
-      {/* Navigation */}
-      <div className="flex justify-between">
+      {/* Desktop navigation */}
+      <div className="hidden justify-between sm:flex">
         <Button
           variant="outline"
           disabled={currentIndex === 0}
@@ -216,6 +268,56 @@ export function WalkthroughClient({ reportId, rooms, userId }: WalkthroughClient
         ) : (
           <Button onClick={handleFinish}>Review & Complete →</Button>
         )}
+      </div>
+
+      {/* Mobile fixed bottom navigation bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:hidden">
+        <div className="flex items-center gap-2 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentIndex === 0}
+            onClick={() => goToRoom(currentIndex - 1)}
+            className="min-h-[44px] min-w-[44px] px-3"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            <span className="sr-only">Previous</span>
+          </Button>
+
+          <div className="flex flex-1 gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => photoUploadRef.current?.triggerCamera()}
+              className="flex-1 min-h-[44px]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                <circle cx="12" cy="13" r="3"/>
+              </svg>
+            </Button>
+          </div>
+
+          {currentIndex < rooms.length - 1 ? (
+            <Button
+              size="sm"
+              onClick={() => goToRoom(currentIndex + 1)}
+              className="min-h-[44px] px-4"
+            >
+              Next
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              onClick={handleFinish}
+              className="min-h-[44px] px-4"
+            >
+              Review
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
