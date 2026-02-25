@@ -16,7 +16,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center animate-fade-in">
       <div className="rounded-full bg-destructive/10 p-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"

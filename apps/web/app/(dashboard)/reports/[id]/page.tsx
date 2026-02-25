@@ -36,7 +36,7 @@ export default async function ReportDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link href={`/properties/${report.property_id}`}>
           <Button variant="ghost" size="sm">
@@ -95,19 +95,19 @@ export default async function ReportDetailPage({ params }: Props) {
       )}
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
+        <Card className="border-primary/10 bg-gradient-to-br from-primary/5 to-transparent">
           <CardHeader className="pb-2">
             <CardDescription>Rooms</CardDescription>
             <CardTitle className="text-2xl">{rooms.length}</CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="border-primary/10 bg-gradient-to-br from-primary/5 to-transparent">
           <CardHeader className="pb-2">
             <CardDescription>Photos</CardDescription>
             <CardTitle className="text-2xl">{totalPhotos}</CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="border-primary/10 bg-gradient-to-br from-primary/5 to-transparent">
           <CardHeader className="pb-2">
             <CardDescription>Created</CardDescription>
             <CardTitle className="text-2xl">

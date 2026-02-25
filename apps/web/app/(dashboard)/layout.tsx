@@ -18,17 +18,20 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <header className="sticky top-0 z-50 border-b bg-background">
+      <header className="glass sticky top-0 z-50 border-b">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16">
           <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="text-lg font-bold sm:text-xl">
-              ConditionLog
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
+                CL
+              </div>
+              <span className="text-lg font-bold sm:text-xl">ConditionLog</span>
             </Link>
-            <nav className="hidden items-center gap-4 sm:flex" aria-label="Main navigation">
-              <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <nav className="hidden items-center gap-1 sm:flex" aria-label="Main navigation">
+              <Link href="/dashboard" className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
                 Dashboard
               </Link>
-              <Link href="/properties" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/properties" className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
                 Properties
               </Link>
             </nav>

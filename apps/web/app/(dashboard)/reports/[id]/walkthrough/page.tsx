@@ -37,7 +37,7 @@ export default async function WalkthroughPage({ params }: Props) {
   const property = report.properties as Record<string, unknown> | null;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link href={`/reports/${id}`}>
           <Button variant="ghost" size="sm">

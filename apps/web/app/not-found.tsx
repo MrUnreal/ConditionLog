@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
-      <div className="rounded-full bg-muted p-4">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center animate-fade-in">
+      <div className="rounded-full bg-primary/10 p-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
@@ -15,7 +15,7 @@ export default function NotFound() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-muted-foreground"
+          className="text-primary"
           aria-hidden="true"
         >
           <circle cx="11" cy="11" r="8" />

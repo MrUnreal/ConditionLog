@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   const properties = await getProperties();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">My Properties</h1>
@@ -17,21 +17,29 @@ export default async function DashboardPage() {
           </p>
         </div>
         <Link href="/properties/new">
-          <Button>+ Add Property</Button>
+          <Button className="shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add Property
+          </Button>
         </Link>
       </div>
 
       {properties.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="mb-4 text-5xl">🏠</div>
+        <Card className="border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
             <h2 className="mb-2 text-xl font-semibold">No properties yet</h2>
             <p className="mb-6 max-w-sm text-muted-foreground">
               Add your first rental property to start documenting its condition and protecting your
               deposit.
             </p>
             <Link href="/properties/new">
-              <Button>Add your first property</Button>
+              <Button size="lg" className="shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Add your first property
+              </Button>
             </Link>
           </CardContent>
         </Card>
@@ -39,7 +47,9 @@ export default async function DashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {properties.map((property) => (
             <Link key={property.id} href={`/properties/${property.id}`}>
-              <Card className="transition-shadow hover:shadow-md">
+              <Card className="group relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30">
+                {/* Colored top accent */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary to-violet-500 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>

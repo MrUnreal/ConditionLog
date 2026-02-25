@@ -23,7 +23,7 @@ export default async function RoomSetupPage({ params }: Props) {
   const propertyType = ((property?.property_type as string) ?? 'apartment') as PropertyType;
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link href={`/reports/${id}`}>
           <Button variant="ghost" size="sm">

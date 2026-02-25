@@ -34,7 +34,7 @@ export default function NewPropertyPage() {
   );
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link href="/dashboard">
           <Button variant="ghost" size="sm">

@@ -47,7 +47,7 @@ export default async function ReviewPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link href={`/reports/${id}/walkthrough`}>
           <Button variant="ghost" size="sm">

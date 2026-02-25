@@ -36,7 +36,7 @@ export default async function PropertyDetailPage({ params }: Props) {
   const reports = await getReports(id);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link href="/dashboard">
           <Button variant="ghost" size="sm">
@@ -131,7 +131,8 @@ export default async function PropertyDetailPage({ params }: Props) {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {reports.map((report) => (
               <Link key={report.id} href={`/reports/${report.id}`}>
-                <Card className="transition-shadow hover:shadow-md">
+                <Card className="group relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30">
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary to-violet-500 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-base">
