@@ -34,7 +34,7 @@ export function ScoreRing({
   sublabel,
   className = '',
 }: ScoreRingProps) {
-  const [animatedScore, setAnimatedScore] = useState(0);
+  const [animatedScore, setAnimatedScore] = useState(score); // SSR shows real score
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +44,15 @@ export function ScoreRing({
   const color = getScoreColor(score);
 
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setAnimatedScore(score);
+      return;
+    }
+
+    // Reset to 0 only client-side before animation
+    setAnimatedScore(0);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting && !isVisible) {
@@ -57,7 +66,7 @@ export function ScoreRing({
       observer.observe(containerRef.current);
     }
     return () => observer.disconnect();
-  }, [isVisible]);
+  }, [isVisible, score]);
 
   useEffect(() => {
     if (!isVisible) return;

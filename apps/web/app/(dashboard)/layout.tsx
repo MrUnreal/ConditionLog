@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { signOut } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Logo } from '@/components/logo';
 import { MobileNav } from './mobile-nav';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -22,9 +23,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16">
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#00E5C5] text-[#080C12] text-xs font-bold">
-                CL
-              </div>
+              <Logo size={28} />
               <span className="text-lg font-bold tracking-tight sm:text-xl">ConditionLog</span>
             </Link>
             <nav className="hidden items-center gap-1 sm:flex" aria-label="Main navigation">

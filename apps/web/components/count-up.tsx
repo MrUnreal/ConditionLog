@@ -31,7 +31,7 @@ export function CountUp({
   className = '',
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(end); // Default to end value so "0" never shows
   const [hasStarted, setHasStarted] = useState(false);
 
   // Start counting when element becomes visible
@@ -44,6 +44,9 @@ export function CountUp({
       setValue(end);
       return;
     }
+
+    // Reset to 0 only once we know the observer is set up (client-side)
+    setValue(0);
 
     const observer = new IntersectionObserver(
       ([entry]) => {

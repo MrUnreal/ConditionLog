@@ -72,9 +72,7 @@ export function InstallPrompt() {
       <div className="rounded-xl border bg-card p-4 shadow-lg">
         <div className="flex items-start gap-3">
           {/* App icon */}
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-            CL
-          </div>
+          <img src="/logo.png" alt="ConditionLog" width={40} height={40} className="shrink-0 rounded-lg" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold">Install ConditionLog</p>
             {isIOS ? (

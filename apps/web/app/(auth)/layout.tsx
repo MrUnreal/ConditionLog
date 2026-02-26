@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo } from '@/components/logo';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,9 +9,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Background glow */}
         <div className="absolute -left-20 top-1/3 h-64 w-64 rounded-full bg-[#00E5C5]/5 blur-3xl pointer-events-none" aria-hidden="true" />
         <Link href="/" className="flex items-center gap-2 relative z-10">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#00E5C5] text-[#080C12] text-sm font-bold">
-            CL
-          </div>
+          <Logo size={28} />
           <span className="text-lg font-bold tracking-tight">ConditionLog</span>
         </Link>
 
@@ -43,9 +42,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="flex flex-1 flex-col items-center justify-center bg-[#0F1620] p-4 sm:p-8">
         {/* Mobile logo */}
         <Link href="/" className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#00E5C5] text-[#080C12] text-sm font-bold">
-            CL
-          </div>
+          <Logo size={28} />
           <span className="text-lg font-bold tracking-tight">ConditionLog</span>
         </Link>
 
